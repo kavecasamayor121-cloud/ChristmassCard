@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f9c6dd">
+<title>Feedback 💌</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Courgette&family=Playfair+Display:wght@900&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+<div id="backdrop"></div>
+
+<div id="viewport">
+  <!-- same 1080 x 1350 canvas as the card -->
+  <main id="stage">
+    <img id="bg" src="Background.png" alt="">
+
+    <!-- ============ 1 · FEEDBACK FORM ============ -->
+    <section class="slide form" data-slide="1">
+      <div class="btn field ink-k" id="fbField">
+        <textarea id="fb" maxlength="800" rows="1" placeholder="Feedback" aria-label="Your feedback" spellcheck="true"></textarea>
+        <span class="count" id="count" aria-hidden="true">0 / 800</span>
+      </div>
+
+      <!-- small hint / error line under the box -->
+      <div class="ln script ink-b" id="status" data-nosplit style="--cx:540;--cy:1004;--fs:38" role="status" aria-live="polite"><span class="t"></span></div>
+
+      <!-- the envelope that flies away once the feedback is sent -->
+      <div class="ln emoji" id="fly" style="--cx:540;--cy:620;--fs:190" aria-hidden="true"><span class="t">💌</span></div>
+
+      <button class="btn ink-k" id="done" style="--x:309;--y:1045;--w:473;--h:153">
+        <span class="lbl" style="--fs:50">DONE</span>
+      </button>
+    </section>
+
+    <!-- ============ 2 · THANK YOU ============ -->
+    <section class="slide thanks" data-slide="2">
+      <div class="ln script ink-b bold" style="--cx:540;--cy:420;--fs:84"><span class="t">Thank you,</span></div>
+      <div class="ln script ink-b bold" id="thxName" style="--cx:540;--cy:550;--fs:118"><span class="t">friend!</span></div>
+      <div class="ln script ink-b bold" style="--cx:540;--cy:720;--fs:58"><span class="t">your feedback was</span></div>
+      <div class="ln script ink-b bold" style="--cx:540;--cy:800;--fs:58"><span class="t">sent straight to me 💌</span></div>
+      <div class="ln script ink-b bold" style="--cx:540;--cy:950;--fs:62"><span class="t">Merry Christmas! 🎄✨</span></div>
+
+      <button class="btn ink-b" id="again" style="--x:324;--y:1166;--w:443;--h:152;--fill:#fbcadf">
+        <span class="lbl" style="--fs:40">Watch again</span>
+      </button>
+    </section>
+  </main>
+</div>
+
+<button id="mute" aria-label="Music on/off" title="Music on/off" hidden>♪</button>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="veil" class="arrive" aria-hidden="true"></div>
+
+<script src="feedback.js"></script>
+</body>
+</html>

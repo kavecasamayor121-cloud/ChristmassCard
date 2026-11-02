@@ -1,0 +1,65 @@
+/* =========================================================
+   Feedback page  –  builds on style.css (same canvas, buttons, text, fx)
+   ========================================================= */
+
+/* the pink curtain that lifts when the page opens */
+#veil.arrive{opacity:1;animation:veilOut 1s ease .1s both}
+@keyframes veilOut{from{opacity:1}to{opacity:0}}
+
+/* ---------- the Feedback box ----------
+   Same look as the name box. Tap it and it grows into a proper writing area;
+   click away while it is empty and it folds back down. */
+#fbField{--x:222;--y:435;--w:647;--h:139;
+  transition:top .8s var(--ease-out),height .8s var(--ease-out)}
+#fbField.open{--y:300;--h:640}
+
+#fb{position:relative;z-index:1;display:block;width:100%;height:100%;
+  padding:37px 44px 0;background:transparent;border:0;outline:0;resize:none;
+  text-align:center;color:var(--ink-b);caret-color:#e0457b;
+  font-family:var(--f-script);font-size:40px;line-height:1.35;
+  overflow-y:auto;scrollbar-width:none;
+  user-select:text;-webkit-user-select:text;
+  transition:padding .8s var(--ease-out)}
+#fb::-webkit-scrollbar{display:none}
+#fb::placeholder{color:var(--ink-k);opacity:1;font-family:var(--f-serif);font-weight:900;font-size:52px;
+  transition:opacity .3s}
+#fbField.open #fb{padding:70px 52px 64px;
+  /* long text fades out softly at the top and bottom edge while scrolling */
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 38px,#000 calc(100% - 38px),transparent 100%);
+          mask-image:linear-gradient(to bottom,transparent 0,#000 38px,#000 calc(100% - 38px),transparent 100%)}
+#fbField.open #fb:focus::placeholder{opacity:.35}
+#fb:read-only{opacity:.75}
+
+.count{position:absolute;right:14px;top:calc(100% + 8px);z-index:1;pointer-events:none;
+  font-family:var(--f-script);font-size:26px;line-height:1;color:var(--ink-b);
+  opacity:0;transition:opacity .4s ease}
+#fbField.open .count{opacity:.7;transition-delay:.45s}
+
+/* soft invitation to tap the box (the name box on the card has none) */
+.slide.form.active #fbField:not(.focus):not(.open) .pulse{
+  animation:glow 2.8s ease-out calc(var(--bd, .8s) + 1.2s) infinite}
+
+/* sending: dashes run faster, button breathes */
+#fbField.sending rect{animation-duration:.45s}
+#done.sending .pulse{animation:glow 1s ease-out infinite}
+
+/* ---------- hint / error line ---------- */
+#status .t{opacity:0;transform:translateY(12px);
+  transition:opacity .45s ease,transform .6s var(--ease-out)}
+#status.show .t{opacity:1;transform:none}
+#status.error{color:#b4235a}
+
+/* ---------- after a successful send ---------- */
+.slide.form.out.active .btn.field{animation:fieldOut .8s var(--ease-in) both}
+.slide.form.out.active #done{animation:btnOut .6s var(--ease-in) both}
+@keyframes fieldOut{to{opacity:0;transform:translateY(-50px) scale(.7);filter:blur(8px)}}
+/* once the slide itself starts leaving, keep the already hidden pieces hidden (no flicker) */
+.slide.form.out.leaving .btn{animation:none;opacity:0}
+
+#fly .t{opacity:0}
+.slide.form.out #fly .t{animation:envFly 1.9s cubic-bezier(.45,0,.2,1) .35s both}
+@keyframes envFly{
+  0%  {opacity:0;transform:translateY(50px) scale(.3) rotate(-20deg)}
+  20% {opacity:1;transform:translateY(0) scale(1.15) rotate(-6deg)}
+  36% {opacity:1;transform:translateY(-14px) scale(1.05) rotate(5deg)}
+  100%{opacity:0;transform:translate(140px,-1000px) scale(.45) rotate(18deg)}}

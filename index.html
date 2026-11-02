@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f9c6dd">
+<title>Open Me 💌</title>
+
+<!-- Fonts (need internet the first time; the page still works with fallbacks if offline) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Courgette&family=Playfair+Display:wght@900&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="backdrop"></div>
+
+<div id="viewport">
+  <!-- The card is designed on a 1080 x 1350 canvas and scaled to fit any screen -->
+  <main id="stage">
+    <img id="bg" src="Background.png" alt="">
+
+    <!-- ============ 1 · OPEN ME ============ -->
+    <section class="slide" data-slide="1">
+      <div class="ln wide ink-k" style="--cx:522;--cy:395.5" data-grp="open" data-w="814" data-h="121" data-fs="170" data-split><span class="t">OPEN</span></div>
+      <div class="ln wide ink-k" style="--cx:576;--cy:607"   data-grp="open" data-w="430" data-h="116" data-split data-delay=".35"><span class="t">ME</span></div>
+      <div class="ln emoji envelope" style="--cx:576;--cy:822.5" data-grp="env" data-w="164" data-fs="130"><span class="t">💌</span></div>
+
+      <button class="btn ink-k" style="--x:304;--y:1069;--w:472;--h:173" data-go="2">
+        <span class="lbl" data-grp="b-click" data-w="334" data-fs="52">CLICK ME</span>
+      </button>
+    </section>
+
+    <!-- ============ 2 · ENTER YOUR NAME ============ -->
+    <section class="slide" data-slide="2">
+      <div class="btn field ink-k" style="--x:222;--y:435;--w:647;--h:139">
+        <input id="nameInput" type="text" maxlength="24" autocomplete="off" autocapitalize="words" spellcheck="false"
+               aria-label="Enter your name" placeholder="Enter your name" data-grp="name">
+      </div>
+      <!-- invisible helper used to size the placeholder text -->
+      <span class="ln measure serif-b" data-grp="name" data-w="380" data-fs="52" data-dy="5" aria-hidden="true"><span class="t">Enter your name</span></span>
+
+      <button class="btn ink-k" style="--x:309;--y:1045;--w:473;--h:153" data-go="3" data-need-name>
+        <span class="lbl" data-grp="b-cont" data-w="318" data-fs="46">Continue</span>
+      </button>
+    </section>
+
+    <!-- ============ 3 · MERRY CHRISTMAS ============ -->
+    <section class="slide" data-slide="3">
+      <div class="ln script ink-k bold" style="--cx:576;--cy:351.5" data-grp="s3" data-w="742" data-fs="60" data-ink="Hi Name Merry Christmass!"><span class="t">Hi <span id="nameOut">Name</span> Merry Christmass!</span></div>
+      <div class="ln script ink-k bold" style="--cx:576;--cy:515.5" data-grp="s3" data-w="740"><span class="t">"Wishing you a holly, jolly</span></div>
+      <div class="ln script ink-k bold" style="--cx:576;--cy:597.5" data-grp="s3" data-w="745"><span class="t">Christmas packed with good</span></div>
+      <div class="ln script ink-k bold" style="--cx:577;--cy:681.5" data-grp="s3" data-w="786"><span class="t">food, great laughs, and zero</span></div>
+      <div class="ln script ink-k bold" style="--cx:573;--cy:761.5" data-grp="s3"><span class="t">stress, my friend!" 🎄✨</span></div>
+
+      <button class="btn ink-k" style="--x:304;--y:1034;--w:472;--h:153" data-go="4">
+        <span class="lbl" data-grp="b-cont" data-w="318">Continue</span>
+      </button>
+    </section>
+
+    <!-- ============ 4 · ARE YOU READY ============ -->
+    <section class="slide" data-slide="4">
+      <div class="ln script ink-k bold" style="--cx:588;--cy:512" data-grp="s4" data-w="834" data-fs="72"><span class="t">Are you Ready?????</span></div>
+
+      <button class="btn ink-k" style="--x:263;--y:991;--w:554;--h:153" data-go="5">
+        <span class="lbl" data-grp="b-then" data-w="489" data-fs="46">Then Click Me</span>
+      </button>
+    </section>
+
+    <!-- ============ 5 · FIRST YEAR COLLEGE ============ -->
+    <section class="slide" data-slide="5">
+      <div class="ln script ink-k bold" style="--cx:544;--cy:380" data-grp="s5" data-w="616" data-fs="68"><span class="t">i would like to start</span></div>
+      <div class="ln script ink-k bold" style="--cx:543.5;--cy:483" data-grp="s5" data-w="513"><span class="t">the moment from</span></div>
+      <div class="ln script ink-k bold" style="--cx:543.5;--cy:574.5" data-grp="s5" data-w="417"><span class="t">our first year</span></div>
+      <div class="ln script ink-k bold" style="--cx:540;--cy:669" data-grp="s5"><span class="t">college 😝</span></div>
+
+      <button class="btn ink-k" style="--x:263;--y:1059;--w:554;--h:153" data-go="6">
+        <span class="lbl" data-grp="b-cont" data-w="318">Continue</span>
+      </button>
+    </section>
+
+    <!-- ============ 6 · PHOTOS 1-3 ============ -->
+    <section class="slide tone-b" data-slide="6">
+      <figure class="ph a-left"   style="--x:0;--y:0;--w:613;--h:460;--d:0.2s"><img src="Photos1.png" alt="" draggable="false"></figure>
+      <figure class="ph a-right"  style="--x:450;--y:460;--w:630;--h:460;--d:1.7s"><img src="Photos2.png" alt="" draggable="false"></figure>
+      <figure class="ph a-bottom" style="--x:0;--y:884;--w:621;--h:466;--d:3.2s"><img src="Photos3.png" alt="" draggable="false"></figure>
+
+      <div class="ln script ink-b" style="--cx:226;--cy:487.5;--i:0" data-grp="s6" data-w="367" data-fs="46"><span class="t">I think this is the</span></div>
+      <div class="ln script ink-b" style="--cx:226;--cy:559.5;--i:1"   data-grp="s6" data-w="432"><span class="t">first gala where we</span></div>
+      <div class="ln script ink-b" style="--cx:227.5;--cy:628;--i:2" data-grp="s6" data-w="413"><span class="t">got to bond, create</span></div>
+      <div class="ln script ink-b" style="--cx:226;--cy:692.5;--i:3" data-grp="s6" data-w="438"><span class="t">memories, and enjoy</span></div>
+      <div class="ln script ink-b" style="--cx:225.5;--cy:759.5;--i:4" data-grp="s6" data-w="433"><span class="t">our time together as</span></div>
+      <div class="ln script ink-b" style="--cx:223;--cy:822;--i:5" data-grp="s6"><span class="t">students. ❤️</span></div>
+
+      <button class="btn ink-b" style="--x:637;--y:1197;--w:442;--h:152;--fill:#fbcadf" data-go="7">
+        <span class="lbl" data-grp="b-cont" data-w="318">Continue</span>
+      </button>
+    </section>
+
+    <!-- ============ 7 · PHOTOS 4-5 ============ -->
+    <section class="slide tone-b" data-slide="7">
+      <figure class="ph a-top"  style="--x:108;--y:60;--w:808;--h:459;--d:0.2s"><img src="Photos4.png" alt="" draggable="false"></figure>
+      <figure class="ph a-left" style="--x:0;--y:566;--w:610;--h:458;--d:1.7s"><img src="Photos5.png" alt="" draggable="false"></figure>
+
+      <div class="ln script ink-b" style="--cx:857;--cy:628.5;--i:0" data-grp="s7" data-w="362" data-fs="46"><span class="t">We always went</span></div>
+      <div class="ln script ink-b" style="--cx:857.5;--cy:694.5;--i:1"   data-grp="s7" data-w="377"><span class="t">outsideif we have</span></div>
+      <div class="ln script ink-b" style="--cx:853.5;--cy:760.5;--i:2" data-grp="s7" data-w="303"><span class="t">some freetime,</span></div>
+      <div class="ln script ink-b" style="--cx:854.5;--cy:827.5;--i:3"   data-grp="s7" data-w="417"><span class="t">chilled at the park,</span></div>
+      <div class="ln script ink-b" style="--cx:858;--cy:888;--i:4"   data-grp="s7" data-w="370"><span class="t">and talked while</span></div>
+      <div class="ln script ink-b" style="--cx:857.5;--cy:961.5;--i:5"   data-grp="s7" data-w="443"><span class="t">waiting for our next</span></div>
+      <div class="ln script ink-b" style="--cx:853;--cy:1027.5;--i:6" data-grp="s7"><span class="t">subject. ❤️</span></div>
+
+      <button class="btn ink-b" style="--x:346;--y:1166;--w:442;--h:152;--fill:#fbcadf" data-go="8">
+        <span class="lbl" data-grp="b-cont" data-w="318">Continue</span>
+      </button>
+    </section>
+
+    <!-- ============ 8 · PHOTOS 6-7 ============ -->
+    <section class="slide tone-b" data-slide="8">
+      <figure class="ph a-left"  style="--x:0;--y:215;--w:614;--h:460;--d:0.2s"><img src="Photos6.png" alt="" draggable="false"></figure>
+      <figure class="ph a-right" style="--x:477;--y:675;--w:603;--h:447;--d:1.7s"><img src="Photos7.png" alt="" draggable="false"></figure>
+
+      <div class="ln script ink-b" style="--cx:841.5;--cy:346.5;--i:0" data-grp="s8" data-w="415" data-fs="46"><span class="t">Then We joined the</span></div>
+      <div class="ln script ink-b" style="--cx:841;--cy:413.5;--i:1"   data-grp="s8" data-w="424"><span class="t">first intrams in our</span></div>
+      <div class="ln script ink-b" style="--cx:840.5;--cy:475;--i:2" data-grp="s8" data-w="137"><span class="t">school</span></div>
+
+      <button class="btn ink-b" style="--x:324;--y:1166;--w:443;--h:152;--fill:#fbcadf" data-go="9">
+        <span class="lbl" data-grp="b-cont" data-w="318">Continue</span>
+      </button>
+    </section>
+
+    <!-- ============ 9 · PHOTOS 8-9 ============ -->
+    <section class="slide tone-b" data-slide="9">
+      <figure class="ph a-zoom" style="--x:0;--y:343;--w:497;--h:662;--d:0.2s"><img src="Photos8.png" alt="" draggable="false"></figure>
+      <figure class="ph a-zoom" style="--x:584;--y:345;--w:496;--h:660;--d:1.7s"><img src="Photos9.png" alt="" draggable="false"></figure>
+
+      <div class="ln script ink-b" style="--cx:536.5;--cy:87.5;--i:0"  data-grp="s9" data-w="457" data-fs="46"><span class="t">Joining school events</span></div>
+      <div class="ln script ink-b" style="--cx:536;--cy:154.5;--i:1" data-grp="s9" data-w="494"><span class="t">just for fun, laughing</span></div>
+      <div class="ln script ink-b" style="--cx:542.5;--cy:220.5;--i:2" data-grp="s9" data-w="461"><span class="t">together while taking</span></div>
+      <div class="ln script ink-b" style="--cx:528.5;--cy:287.5;--i:3" data-grp="s9" data-w="247"><span class="t">this picture.</span></div>
+
+      <button class="btn ink-b" style="--x:324;--y:1166;--w:443;--h:152;--fill:#fbcadf" data-go="10">
+        <span class="lbl" data-grp="b-cont" data-w="318">Continue</span>
+      </button>
+    </section>
+
+    <!-- ============ 10 · PHOTOS 10-12 ============ -->
+    <section class="slide tone-b" data-slide="10">
+      <figure class="ph a-left"  style="--x:0;--y:33;--w:442;--h:802;--d:0.2s"><img src="Photos10.png" alt="" draggable="false"></figure>
+      <figure class="ph a-right" style="--x:442;--y:33;--w:602;--h:401;--d:1.7s"><img src="Photos11.png" alt="" draggable="false"></figure>
+      <figure class="ph a-right" style="--x:442;--y:434;--w:602;--h:401;--d:3.2s"><img src="Photos12.png" alt="" draggable="false"></figure>
+
+      <div class="ln script ink-b" style="--cx:542.5;--cy:943.5;--i:0"  data-grp="s10" data-w="425" data-fs="46"><span class="t">Taking some picture</span></div>
+      <div class="ln script ink-b" style="--cx:542;--cy:1004;--i:1" data-grp="s10" data-w="512"><span class="t">even the class is started</span></div>
+
+      <button class="btn ink-b" style="--x:324;--y:1166;--w:443;--h:152;--fill:#fbcadf" data-go="11">
+        <span class="lbl" data-grp="b-cont" data-w="318">Continue</span>
+      </button>
+    </section>
+
+    <!-- ============ 11 · THE END ============ -->
+    <section class="slide tone-b" data-slide="11">
+      <div class="ln script ink-b" style="--cx:540.5;--cy:322;--i:0"   data-grp="s11" data-w="627" data-fs="64"><span class="t">So many think thats</span></div>
+      <div class="ln script ink-b" style="--cx:544.5;--cy:419;--i:1"   data-grp="s11" data-w="613"><span class="t">happend to us until</span></div>
+      <div class="ln script ink-b" style="--cx:545;--cy:515;--i:2"     data-grp="s11" data-w="618"><span class="t">now but im tired of</span></div>
+      <div class="ln script ink-b" style="--cx:543.5;--cy:612;--i:3"   data-grp="s11" data-w="729"><span class="t">creating this so this the</span></div>
+
+      <!-- tap END → Feedback.html -->
+      <button class="ln script ink-k end" id="again" style="--cx:541;--cy:972.5" data-grp="end" data-w="144" data-fs="84" aria-label="END - tap to leave feedback"><span class="t">END</span></button>
+    </section>
+  </main>
+</div>
+
+<button id="mute" aria-label="Music on/off" title="Music on/off" hidden>♪</button>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="veil" aria-hidden="true"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

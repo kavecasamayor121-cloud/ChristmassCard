@@ -1,0 +1,1283 @@
+/* =========================================================
+   Open Me card – 1080 x 1350 canvas, scaled to any screen
+   Files expected next to index.html:
+   Background.png · Music.mp4 · Photos1.png … Photos12.png
+   ========================================================= */
+
+:root{
+  --btn-fill:#fac6de;
+  --ink-k:#000;
+  --ink-b:#493337;
+  --f-wide:'Syncopate','Michroma','Arial Black',sans-serif;
+  --f-script:'Courgette','Segoe Script','Brush Script MT',cursive;
+  --f-slab:'Alfa Slab One','Rockwell','Georgia',serif;
+  --f-serif:'Playfair Display','Georgia',serif;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-in:cubic-bezier(.5,0,.9,.4);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  height:100%;
+  overflow:hidden;
+  background:#f9c6dd;
+  font-family:var(--f-script);
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:manipulation;
+}
+
+#backdrop{
+  position:fixed;
+  inset:-40px;
+  background:#f9c6dd url("Background.png") center/cover;
+  filter:blur(26px) saturate(1.05);
+  transform:scale(1.05);
+}
+
+#viewport{
+  position:fixed;
+  inset:0;
+}
+
+#veil{
+  position:fixed;
+  inset:0;
+  z-index:40;
+  background:#f9c6dd;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .7s ease;
+}
+
+body.leaving-page #veil{
+  opacity:1;
+}
+
+/* ---------- STAGE ---------- */
+
+#stage{
+  position:absolute;
+  left:0;
+  top:0;
+  width:1080px;
+  height:1350px;
+  overflow:hidden;
+  transform-origin:0 0;
+  background:#f9c6dd;
+  box-shadow:0 20px 70px rgba(150,40,90,.35);
+}
+
+#bg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  pointer-events:none;
+  animation:bgDrift 24s ease-in-out infinite alternate;
+}
+
+@keyframes bgDrift{
+  from{transform:scale(1)}
+  to{transform:scale(1.06) translate(-8px,-6px)}
+}
+
+/* ---------- SLIDES ---------- */
+
+.slide{
+  position:absolute;
+  inset:0;
+  visibility:hidden;
+  opacity:0;
+  pointer-events:none;
+}
+
+.slide.active{
+  visibility:visible;
+  opacity:1;
+  pointer-events:auto;
+  animation:slideIn .5s ease-out both;
+}
+
+.slide.leaving{
+  visibility:visible;
+  opacity:1;
+  pointer-events:none;
+  z-index:2;
+}
+
+@keyframes slideIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+@keyframes slideOut{
+  0%,45%{opacity:1}
+  100%{opacity:0}
+}
+
+/* =========================================================
+   TEXT
+   ========================================================= */
+
+.ln{
+  position:absolute;
+  left:calc((var(--cx) - 540) * 1px);
+  top:calc(var(--cy) * 1px - 70px);
+  width:1080px;
+  height:140px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+  line-height:1;
+  font-size:calc(var(--fs, 50) * 1px);
+  color:var(--ink-k);
+  background:none;
+  border:0;
+  pointer-events:none;
+}
+
+.ln .t{
+  display:inline-block;
+  position:relative;
+  transform-origin:50% 60%;
+}
+
+.ink-k{color:var(--ink-k)}
+.ink-b{color:var(--ink-b)}
+
+.wide{
+  font-family:var(--f-wide);
+  font-weight:700;
+  letter-spacing:.01em;
+  transform:scaleY(var(--sy,1));
+}
+
+.script{
+  font-family:var(--f-script);
+  font-weight:400;
+}
+
+.bold{
+  -webkit-text-stroke:.9px currentColor;
+}
+
+.serif-b{
+  font-family:var(--f-serif);
+  font-weight:900;
+}
+
+.emoji{
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+}
+
+.measure{
+  visibility:hidden !important;
+  left:-3000px;
+  pointer-events:none;
+}
+
+.ln.end{
+  pointer-events:auto;
+  cursor:pointer;
+  font-family:var(--f-script);
+}
+
+.ln .ch{
+  display:inline-block;
+}
+
+.ln .w{
+  display:inline-block;
+  transform-origin:50% 85%;
+}
+
+/* WORD ANIMATIONS */
+
+.slide.active .ln.has-words .w{
+  animation:wordIn 1.05s var(--ease-out) both;
+  animation-delay:calc(var(--tb, .45s) + var(--wi, 0) * var(--ws, .075s));
+}
+
+.slide.leaving .ln.has-words .w{
+  animation:wordOut .45s var(--ease-in) both;
+  animation-delay:calc(var(--wi, 0) * .012s);
+}
+
+@keyframes wordIn{
+  0%{
+    opacity:0;
+    transform:translateY(34px) rotate(4deg) scale(.9);
+    filter:blur(9px);
+  }
+  55%{
+    opacity:1;
+    filter:blur(0);
+  }
+  100%{
+    opacity:1;
+    transform:none;
+    filter:blur(0);
+  }
+}
+
+@keyframes wordOut{
+  to{
+    opacity:0;
+    transform:translateY(-24px) scale(.96);
+    filter:blur(7px);
+  }
+}
+
+/* SCRIPT LINE FLOAT */
+
+.slide.active .ln.script:not(.end),
+.slide.leaving .ln.script:not(.end){
+  animation:lineFloat 6s ease-in-out infinite;
+  animation-delay:calc(var(--li, 0) * -1.1s);
+}
+
+@keyframes lineFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-5px)}
+}
+
+/* GENERIC TEXT FADE */
+
+@keyframes txtIn{
+  from{
+    opacity:0;
+    transform:translateY(26px) scale(.96);
+    filter:blur(7px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+    filter:blur(0);
+  }
+}
+
+/* TITLE LETTERS */
+
+.slide.active .ch{
+  animation:dropIn .95s cubic-bezier(.3,1.5,.5,1) both;
+  animation-delay:calc(.15s + var(--ci) * .09s + var(--ld, 0s));
+}
+
+.slide.leaving .ch{
+  animation:charOut .45s var(--ease-in) both;
+  animation-delay:calc(var(--ci) * .03s);
+}
+
+@keyframes dropIn{
+  from{
+    opacity:0;
+    transform:translateY(-120px) rotate(-8deg) scale(.7);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+@keyframes charOut{
+  to{
+    opacity:0;
+    transform:translateY(40px) rotate(6deg) scale(.8);
+    filter:blur(5px);
+  }
+}
+
+.slide.active .ln[data-split] .t,
+.slide.leaving .ln[data-split] .t{
+  animation:titleBreath 5s ease-in-out calc(2.2s + var(--ld, 0s)) infinite;
+}
+
+@keyframes titleBreath{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-6px) scale(1.015)}
+}
+
+/* ENVELOPE */
+
+.slide.active .ln.envelope .t{
+  animation:
+    envPop .9s cubic-bezier(.3,1.6,.5,1) .9s both,
+    envFloat 3.2s ease-in-out 1.9s infinite;
+}
+
+.slide.leaving .ln.envelope .t{
+  animation:envOut .5s var(--ease-in) both;
+}
+
+@keyframes envPop{
+  from{
+    opacity:0;
+    transform:scale(.2) rotate(-25deg);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+@keyframes envFloat{
+  0%,100%{transform:translateY(0) rotate(-4deg)}
+  50%{transform:translateY(-16px) rotate(5deg) scale(1.05)}
+}
+
+@keyframes envOut{
+  to{
+    opacity:0;
+    transform:translateY(-60px) scale(.5) rotate(14deg);
+  }
+}
+
+/* END TEXT */
+
+.slide.active .ln.end .t{
+  animation:
+    txtIn 1s var(--ease-out) var(--bd, 1.7s) both,
+    endGlow 2.6s ease-in-out calc(var(--bd, 1.7s) + 1s) infinite;
+}
+
+.slide.leaving .ln.end .t{
+  animation:wordOut .45s var(--ease-in) both;
+}
+
+@keyframes endGlow{
+  0%,100%{
+    transform:scale(1);
+    text-shadow:0 0 0 rgba(255,255,255,0);
+  }
+  50%{
+    transform:scale(1.12);
+    text-shadow:
+      0 0 22px rgba(255,255,255,.95),
+      0 0 40px rgba(255,120,170,.6);
+  }
+}
+
+.end:hover .t{
+  transform:scale(1.18) !important;
+}
+
+/* =========================================================
+   PHOTOS
+   ========================================================= */
+
+.ph{
+  position:absolute;
+  left:calc(var(--x) * 1px);
+  top:calc(var(--y) * 1px);
+  width:calc(var(--w) * 1px);
+  height:calc(var(--h) * 1px);
+  overflow:hidden;
+  background:#f6c9da;
+  pointer-events:none;
+  will-change:transform,opacity;
+}
+
+.ph img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  transform-origin:50% 50%;
+}
+
+.ph::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255,255,255,.55) 50%,
+    transparent 65%
+  );
+  transform:translateX(-120%);
+  opacity:0;
+}
+
+/* ORIGINAL PHOTO ANIMATIONS */
+
+.slide.active .ph{
+  animation:phInLeft 1.1s cubic-bezier(.25,.8,.3,1) var(--d) both;
+}
+
+.slide.active .ph.a-right{
+  animation-name:phInRight;
+}
+
+.slide.active .ph.a-top{
+  animation-name:phInTop;
+}
+
+.slide.active .ph.a-bottom{
+  animation-name:phInBottom;
+}
+
+.slide.active .ph.a-zoom{
+  animation-name:phInZoom;
+}
+
+.slide.leaving .ph{
+  animation:phOut .5s var(--ease-in) both;
+}
+
+@keyframes phInLeft{
+  0%{
+    opacity:0;
+    transform:translateX(-170px) scale(.85) rotate(-4deg);
+    clip-path:inset(0 100% 0 0);
+    filter:blur(8px) brightness(1.4);
+  }
+  35%{opacity:1}
+  70%{
+    transform:translateX(14px) scale(1.02) rotate(.8deg);
+    clip-path:inset(0 0 0 0);
+    filter:blur(0) brightness(1.08);
+  }
+  100%{
+    opacity:1;
+    transform:none;
+    clip-path:inset(0 0 0 0);
+    filter:none;
+  }
+}
+
+@keyframes phInRight{
+  0%{
+    opacity:0;
+    transform:translateX(170px) scale(.85) rotate(4deg);
+    clip-path:inset(0 0 0 100%);
+    filter:blur(8px) brightness(1.4);
+  }
+  35%{opacity:1}
+  70%{
+    transform:translateX(-14px) scale(1.02) rotate(-.8deg);
+    clip-path:inset(0 0 0 0);
+    filter:blur(0) brightness(1.08);
+  }
+  100%{
+    opacity:1;
+    transform:none;
+    clip-path:inset(0 0 0 0);
+    filter:none;
+  }
+}
+
+@keyframes phInTop{
+  0%{
+    opacity:0;
+    transform:translateY(-170px) scale(.88) rotate(-2deg);
+    clip-path:inset(0 0 100% 0);
+    filter:blur(8px) brightness(1.4);
+  }
+  35%{opacity:1}
+  70%{
+    transform:translateY(14px) scale(1.02) rotate(.5deg);
+    clip-path:inset(0 0 0 0);
+    filter:blur(0) brightness(1.08);
+  }
+  100%{
+    opacity:1;
+    transform:none;
+    clip-path:inset(0 0 0 0);
+    filter:none;
+  }
+}
+
+@keyframes phInBottom{
+  0%{
+    opacity:0;
+    transform:translateY(170px) scale(.88) rotate(2deg);
+    clip-path:inset(100% 0 0 0);
+    filter:blur(8px) brightness(1.4);
+  }
+  35%{opacity:1}
+  70%{
+    transform:translateY(-14px) scale(1.02) rotate(-.5deg);
+    clip-path:inset(0 0 0 0);
+    filter:blur(0) brightness(1.08);
+  }
+  100%{
+    opacity:1;
+    transform:none;
+    clip-path:inset(0 0 0 0);
+    filter:none;
+  }
+}
+
+@keyframes phInZoom{
+  0%{
+    opacity:0;
+    transform:scale(.5) rotate(-9deg);
+    clip-path:circle(0% at 50% 50%);
+    filter:blur(8px) brightness(1.4);
+  }
+  35%{opacity:1}
+  70%{
+    transform:scale(1.05) rotate(1.2deg);
+    clip-path:circle(75% at 50% 50%);
+    filter:blur(0) brightness(1.08);
+  }
+  100%{
+    opacity:1;
+    transform:none;
+    clip-path:circle(75% at 50% 50%);
+    filter:none;
+  }
+}
+
+@keyframes phOut{
+  to{
+    opacity:0;
+    transform:scale(.94);
+    filter:blur(4px);
+  }
+}
+
+/* IMAGE ZOOM AND MOVEMENT */
+
+.slide.active .ph img,
+.slide.leaving .ph img{
+  animation:
+    imgIn 1.5s var(--ease-out) var(--d) both,
+    kenBurns 11s ease-in-out calc(var(--d) + 1.5s) infinite alternate;
+}
+
+@keyframes imgIn{
+  from{transform:scale(1.35)}
+  to{transform:scale(1)}
+}
+
+@keyframes kenBurns{
+  from{transform:scale(1)}
+  to{
+    transform:scale(1.08) translate(var(--kx,-6px),var(--ky,-4px));
+  }
+}
+
+.ph:nth-child(even) img{
+  --kx:7px;
+  --ky:-5px;
+}
+
+.slide.active .ph::after{
+  animation:shine 1.4s ease-out calc(var(--d) + .75s) 1 both;
+}
+
+@keyframes shine{
+  0%{
+    opacity:1;
+    transform:translateX(-120%);
+  }
+  100%{
+    opacity:1;
+    transform:translateX(120%);
+  }
+}
+
+/* =========================================================
+   NEW PHOTO TRANSITIONS – PHOTO 1 TO PHOTO 12
+   ========================================================= */
+
+/* Keep the outgoing slide visible until the photo exit finishes. */
+
+.slide.leaving{
+  animation:none !important;
+  visibility:visible;
+  opacity:1;
+  pointer-events:none;
+  z-index:2;
+}
+
+/* PHOTO ENTRANCES */
+
+.slide.active .ph.photo1{
+  animation:photoEnter1 1.35s var(--ease-out) var(--d, 0s) both;
+}
+
+.slide.active .ph.photo2{
+  animation:photoEnter2 1.35s var(--ease-out) var(--d, 0s) both;
+}
+
+.slide.active .ph.photo3{
+  animation:photoEnter3 1.35s var(--ease-out) var(--d, 0s) both;
+}
+
+.slide.active .ph.photo4{
+  animation:photoEnter4 1.45s var(--ease-out) var(--d, 0s) both;
+}
+
+.slide.active .ph.photo5{
+  animation:photoEnter5 1.35s var(--ease-out) var(--d, 0s) both;
+}
+
+.slide.active .ph.photo6{
+  animation:photoEnter6 1.35s var(--ease-out) var(--d, 0s) both;
+}
+
+.slide.active .ph.photo7{
+  animation:photoEnter7 1.45s var(--ease-out) var(--d, 0s) both;
+}
+
+.slide.active .ph.photo8{
+  animation:photoEnter8 1.45s var(--ease-out) var(--d, 0s) both;
+}
+
+.slide.active .ph.photo9{
+  animation:photoEnter9 1.45s var(--ease-out) var(--d, 0s) both;
+}
+
+.slide.active .ph.photo10{
+  animation:photoEnter10 1.55s var(--ease-out) var(--d, 0s) both;
+}
+
+.slide.active .ph.photo11{
+  animation:photoEnter11 1.45s var(--ease-out) var(--d, 0s) both;
+}
+
+.slide.active .ph.photo12{
+  animation:photoEnter12 1.65s var(--ease-out) var(--d, 0s) both;
+}
+
+/* PHOTO EXITS */
+
+.slide.leaving .ph.photo1{
+  animation:photoExit1 .9s var(--ease-in) both;
+}
+
+.slide.leaving .ph.photo2{
+  animation:photoExit2 .9s var(--ease-in) both;
+}
+
+.slide.leaving .ph.photo3{
+  animation:photoExit3 .9s var(--ease-in) both;
+}
+
+.slide.leaving .ph.photo4{
+  animation:photoExit4 .9s var(--ease-in) both;
+}
+
+.slide.leaving .ph.photo5{
+  animation:photoExit5 .9s var(--ease-in) both;
+}
+
+.slide.leaving .ph.photo6{
+  animation:photoExit6 .9s var(--ease-in) both;
+}
+
+.slide.leaving .ph.photo7{
+  animation:photoExit7 .9s var(--ease-in) both;
+}
+
+.slide.leaving .ph.photo8{
+  animation:photoExit8 .9s var(--ease-in) both;
+}
+
+.slide.leaving .ph.photo9{
+  animation:photoExit9 .9s var(--ease-in) both;
+}
+
+.slide.leaving .ph.photo10{
+  animation:photoExit10 .9s var(--ease-in) both;
+}
+
+.slide.leaving .ph.photo11{
+  animation:photoExit11 .9s var(--ease-in) both;
+}
+
+.slide.leaving .ph.photo12{
+  animation:photoExit12 .9s var(--ease-in) both;
+}
+
+/* PHOTO 1 – SLIDE FROM LEFT */
+
+@keyframes photoEnter1{
+  from{
+    opacity:0;
+    transform:translateX(-115px) scale(.88);
+    filter:blur(12px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+    filter:blur(0);
+  }
+}
+
+@keyframes photoExit1{
+  to{
+    opacity:0;
+    transform:translateX(110px) scale(.88);
+    filter:blur(12px);
+  }
+}
+
+/* PHOTO 2 – SLIDE FROM RIGHT */
+
+@keyframes photoEnter2{
+  from{
+    opacity:0;
+    transform:translateX(115px) scale(.88);
+    filter:blur(12px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+    filter:blur(0);
+  }
+}
+
+@keyframes photoExit2{
+  to{
+    opacity:0;
+    transform:translateX(-110px) scale(.88);
+    filter:blur(12px);
+  }
+}
+
+/* PHOTO 3 – SLIDE FROM BOTTOM */
+
+@keyframes photoEnter3{
+  from{
+    opacity:0;
+    transform:translateY(90px) scale(.86);
+    filter:blur(12px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+    filter:blur(0);
+  }
+}
+
+@keyframes photoExit3{
+  to{
+    opacity:0;
+    transform:translateY(-90px) scale(.86);
+    filter:blur(12px);
+  }
+}
+
+/* PHOTO 4 – SLIDE FROM TOP */
+
+@keyframes photoEnter4{
+  from{
+    opacity:0;
+    transform:translateY(-90px) scale(.88);
+    filter:blur(12px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+    filter:blur(0);
+  }
+}
+
+@keyframes photoExit4{
+  to{
+    opacity:0;
+    transform:translateY(90px) scale(.88);
+    filter:blur(12px);
+  }
+}
+
+/* PHOTO 5 – SOFT ZOOM */
+
+@keyframes photoEnter5{
+  from{
+    opacity:0;
+    transform:scale(.68);
+    filter:blur(16px);
+  }
+  70%{
+    opacity:1;
+    transform:scale(1.025);
+    filter:blur(0);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+    filter:blur(0);
+  }
+}
+
+@keyframes photoExit5{
+  to{
+    opacity:0;
+    transform:scale(.68);
+    filter:blur(16px);
+  }
+}
+
+/* PHOTO 6 – 3D FLIP */
+
+@keyframes photoEnter6{
+  from{
+    opacity:0;
+    transform:perspective(900px) rotateY(65deg) scale(.9);
+    filter:blur(10px);
+  }
+  to{
+    opacity:1;
+    transform:perspective(900px) rotateY(0) scale(1);
+    filter:blur(0);
+  }
+}
+
+@keyframes photoExit6{
+  to{
+    opacity:0;
+    transform:perspective(900px) rotateY(-65deg) scale(.9);
+    filter:blur(10px);
+  }
+}
+
+/* PHOTO 7 – DIAGONAL ENTRANCE */
+
+@keyframes photoEnter7{
+  from{
+    opacity:0;
+    transform:translate(-75px,65px);
+    filter:blur(15px);
+  }
+  to{
+    opacity:1;
+    transform:translate(0,0);
+    filter:blur(0);
+  }
+}
+
+@keyframes photoExit7{
+  to{
+    opacity:0;
+    transform:translate(75px,-65px);
+    filter:blur(15px);
+  }
+}
+
+/* PHOTO 8 – OPPOSITE DIAGONAL */
+
+@keyframes photoEnter8{
+  from{
+    opacity:0;
+    transform:translate(75px,-65px);
+    filter:blur(15px);
+  }
+  to{
+    opacity:1;
+    transform:translate(0,0);
+    filter:blur(0);
+  }
+}
+
+@keyframes photoExit8{
+  to{
+    opacity:0;
+    transform:translate(-75px,65px);
+    filter:blur(15px);
+  }
+}
+
+/* PHOTO 9 – ZOOM OUT REVEAL */
+
+@keyframes photoEnter9{
+  from{
+    opacity:0;
+    transform:scale(1.28);
+    filter:blur(17px);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+    filter:blur(0);
+  }
+}
+
+@keyframes photoExit9{
+  to{
+    opacity:0;
+    transform:scale(1.3);
+    filter:blur(17px);
+  }
+}
+
+/* PHOTO 10 – CENTER WIPE */
+
+@keyframes photoEnter10{
+  from{
+    opacity:0;
+    clip-path:inset(0 50%);
+    transform:scale(1.08);
+    filter:blur(10px);
+  }
+  to{
+    opacity:1;
+    clip-path:inset(0);
+    transform:scale(1);
+    filter:blur(0);
+  }
+}
+
+@keyframes photoExit10{
+  to{
+    opacity:0;
+    clip-path:inset(0 50%);
+    transform:scale(.92);
+    filter:blur(10px);
+  }
+}
+
+/* PHOTO 11 – ROTATING RISE */
+
+@keyframes photoEnter11{
+  from{
+    opacity:0;
+    transform:translateY(65px) rotate(-3deg) scale(.88);
+    filter:blur(12px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+    filter:blur(0);
+  }
+}
+
+@keyframes photoExit11{
+  to{
+    opacity:0;
+    transform:translateY(-65px) rotate(3deg) scale(.88);
+    filter:blur(12px);
+  }
+}
+
+/* PHOTO 12 – FINAL REVEAL */
+
+@keyframes photoEnter12{
+  from{
+    opacity:0;
+    transform:translateY(45px) scale(.82);
+    clip-path:inset(50% 0);
+    filter:blur(18px) brightness(1.3);
+  }
+  to{
+    opacity:1;
+    transform:none;
+    clip-path:inset(0);
+    filter:blur(0) brightness(1);
+  }
+}
+
+@keyframes photoExit12{
+  to{
+    opacity:0;
+    transform:translateY(-45px) scale(1.18);
+    clip-path:inset(50% 0);
+    filter:blur(18px) brightness(1.3);
+  }
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn{
+  position:absolute;
+  left:calc(var(--x) * 1px);
+  top:calc(var(--y) * 1px);
+  width:calc(var(--w) * 1px);
+  height:calc(var(--h) * 1px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:none;
+  border:0;
+  cursor:pointer;
+  color:var(--ink-k);
+  outline:0;
+  font-family:var(--f-slab);
+  -webkit-appearance:none;
+  appearance:none;
+}
+
+.btn.ink-b{
+  color:var(--ink-b);
+}
+
+.btn svg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:visible;
+  pointer-events:none;
+}
+
+.btn rect{
+  fill:var(--fill, var(--btn-fill));
+  stroke:currentColor;
+  stroke-width:4;
+  stroke-dasharray:12 5;
+  animation:march 1.6s linear infinite;
+}
+
+@keyframes march{
+  to{stroke-dashoffset:-17}
+}
+
+.btn .lbl{
+  position:relative;
+  z-index:1;
+  display:inline-block;
+  white-space:nowrap;
+  line-height:1;
+  font-size:calc(var(--fs, 46) * 1px);
+  pointer-events:none;
+  -webkit-text-stroke:2.4px currentColor;
+  paint-order:stroke fill;
+}
+
+.btn .lbl::after{
+  content:attr(data-t);
+  position:absolute;
+  left:0;
+  top:0;
+  white-space:nowrap;
+  color:transparent;
+  -webkit-text-stroke:1.1px var(--fill, var(--btn-fill));
+}
+
+/* BUTTON ENTRANCE AND EXIT */
+
+.slide.active .btn{
+  animation:btnIn .9s var(--spring) var(--bd, 1.05s) both;
+}
+
+.slide.active .btn.field{
+  animation-delay:calc(var(--bd, 1.05s) - .35s);
+}
+
+.slide.leaving .btn{
+  animation:btnOut .4s var(--ease-in) both;
+}
+
+@keyframes btnIn{
+  from{
+    opacity:0;
+    transform:translateY(46px) scale(.7);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+@keyframes btnOut{
+  to{
+    opacity:0;
+    transform:translateY(24px) scale(.85);
+  }
+}
+
+/* BUTTON GLOW */
+
+.btn .pulse{
+  position:absolute;
+  inset:0;
+  border-radius:24px;
+  pointer-events:none;
+  box-shadow:0 0 0 0 rgba(255,255,255,.0);
+}
+
+.slide.active .btn:not(.field) .pulse{
+  animation:glow 2.2s ease-out calc(var(--bd, 1.05s) + 1.2s) infinite;
+}
+
+@keyframes glow{
+  0%{
+    box-shadow:0 0 0 0 rgba(255,255,255,.85);
+  }
+  70%,100%{
+    box-shadow:0 0 0 26px rgba(255,255,255,0);
+  }
+}
+
+.btn:not(.field):hover{
+  filter:brightness(1.04);
+}
+
+.btn:not(.field):hover rect{
+  animation-duration:.5s;
+}
+
+.btn:not(.field):active{
+  transform:scale(.95) !important;
+  transition:transform .08s;
+}
+
+.btn:focus-visible{
+  outline:4px solid #fff;
+  outline-offset:6px;
+  border-radius:26px;
+}
+
+/* NAME FIELD */
+
+.btn.field{
+  cursor:text;
+}
+
+.field input{
+  position:relative;
+  z-index:1;
+  width:100%;
+  height:100%;
+  padding:0 34px;
+  background:transparent;
+  border:0;
+  outline:0;
+  text-align:center;
+  color:var(--ink-k);
+  font-family:var(--f-serif);
+  font-weight:900;
+  font-size:calc(var(--fs, 52) * 1px);
+  caret-color:#e0457b;
+  padding-top:6px;
+}
+
+.field input::placeholder{
+  color:var(--ink-k);
+  opacity:1;
+}
+
+.btn.field.focus .pulse{
+  box-shadow:
+    0 0 0 8px rgba(255,255,255,.55),
+    0 0 28px 6px rgba(255,255,255,.7);
+}
+
+.btn.field .pulse{
+  transition:box-shadow .25s;
+}
+
+.btn.field.focus rect{
+  animation-duration:.7s;
+}
+
+/* SHAKE */
+
+.shake{
+  animation:shake .45s !important;
+}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-14px)}
+  40%{transform:translateX(12px)}
+  60%{transform:translateX(-8px)}
+  80%{transform:translateX(5px)}
+}
+
+/* CLICK RIPPLE */
+
+.ripple{
+  position:absolute;
+  width:20px;
+  height:20px;
+  margin:-10px 0 0 -10px;
+  border-radius:50%;
+  border:4px solid rgba(255,255,255,.95);
+  pointer-events:none;
+  z-index:50;
+  animation:ripple .7s ease-out forwards;
+}
+
+@keyframes ripple{
+  to{
+    transform:scale(11);
+    opacity:0;
+    border-width:1px;
+  }
+}
+
+/* =========================================================
+   FX CANVAS + MUSIC BUTTON
+   ========================================================= */
+
+#fx{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:20;
+}
+
+#mute{
+  position:fixed;
+  top:max(12px,env(safe-area-inset-top));
+  right:max(12px,env(safe-area-inset-right));
+  z-index:30;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:2px dashed #493337;
+  background:rgba(250,198,222,.85);
+  color:#493337;
+  font-size:22px;
+  line-height:1;
+  cursor:pointer;
+  backdrop-filter:blur(4px);
+  display:grid;
+  place-items:center;
+  transition:transform .15s;
+}
+
+#mute:hover{
+  transform:scale(1.1);
+}
+
+#mute[hidden]{
+  display:none;
+}
+
+#mute.off{
+  opacity:.6;
+  text-decoration:line-through;
+}
+
+#mute.on{
+  animation:beat 1.2s ease-in-out infinite;
+}
+
+@keyframes beat{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.12)}
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce){
+  .slide.active .ph,
+  .slide.leaving .ph{
+    animation-duration:.01ms !important;
+    animation-delay:0s !important;
+  }
+}
